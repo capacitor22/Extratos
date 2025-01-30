@@ -136,6 +136,8 @@ ENV/
 env.bak/
 venv.bak/
 
+
+
 # Spyder project settings
 .spyderproject
 .spyproject
@@ -169,3 +171,13 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
+
+
+# Adicionado Capacitor
+
+# Ambiente virtual desta aplicacao:
+ExtratosEnv/
+
+# Arquivos Saneado* (resultado do processamento dos extratos) e extr* (todos os arquivos de extratos, independentemente do banco)
+extr*
+Saneado*
