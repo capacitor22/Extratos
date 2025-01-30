@@ -18,7 +18,6 @@ def processaBradesco(arquivo='./'):
         planilha = arquivo + 'Bradesco.xls'
     else:
         planilha = arquivo
-
         trataExtratos_logger.debug('Arquivo: ' + planilha)
 
     workbook = xlrd.open_workbook(planilha)
@@ -60,6 +59,42 @@ def processaBradesco(arquivo='./'):
 
     # print(f'LINHAS = {linhas}')
     # print(f'TYPE OF LINHAS = {type(linhas)}')
+    return (linhas)
+
+def processaBradesco_csv(arquivo='./'):
+    #Criando um logger para o modulo
+    trataExtratos_logger = logging.getLogger('root.trataExtratos')    
+    trataExtratos_logger.info('Processando extrato do Bradesco. Arquivo CSV %s', arquivo)
+
+        # Hardcoded para teste
+    if (arquivo == './'):
+        arqcsv = arquivo + 'Bradesco.csv'
+        # print('entrei aqui e csv =' + arqcsv)
+    else:
+        arqcsv = arquivo
+        trataExtratos_logger.debug('Arquivo: ' + arqcsv)
+
+    linhas = []
+    GuardarLinha = False
+
+    with open(arqcsv, mode='r') as arquivo_csv:
+        leitor_csv = csv.reader(arquivo_csv)
+
+        for linha in leitor_csv:
+            if linha: 
+                umaLinha = linha[0]
+                trataExtratos_logger.debug(linha[0])
+                if ('Os dados acima têm como base' in umaLinha):
+                    GuardarLinha = False
+                    trataExtratos_logger.debug(GuardarLinha)
+                if GuardarLinha:
+                    linhas.append(umaLinha)
+                if ('Saldo (R$)' in umaLinha):
+                    GuardarLinha = True 
+                    trataExtratos_logger.debug(GuardarLinha)
+                
+    
+    # print(linhas)
     return (linhas)
 
 def processaItau(arquivo='./'):

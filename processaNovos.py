@@ -3,7 +3,7 @@ from openpyxl.styles import PatternFill, Alignment, Border, Side
 from datetime import datetime
 from dotenv import load_dotenv
 
-from trataExtratoXLS import processaBradesco, processaItau, processaBB, processaBB_csv, processaOutros
+from trataExtrato import processaBradesco, processaBradesco_csv, processaItau, processaBB, processaBB_csv, processaOutros
 
 def get_maximum_rows(sheet, col=None):
     if col is None:
@@ -50,7 +50,6 @@ def fProcNovos():
         folhaOriginais = wb['Linhas Originais']
         folhaPadronizadas = wb['Linhas Padronizadas']
         # max_FO = get_maximum_rows(folhaOriginais)
-        module_logger.debug('try')
     except FileNotFoundError:
         wb = openpyxl.Workbook()
         folhaOriginais = wb.create_sheet(title='Linhas Originais')
@@ -124,7 +123,7 @@ def fProcNovos():
         caminhoCompleto_old = oldAdress + lista[x] #variável recebe caminho + arquivo, conforme indice
         caminhoCompleto_new = newAdress + dtStrProcessamento  + ' - ' + lista[x]  #variável recebe caminho + arquivo, conforme indice
 
-        if (lista[x].find('Bradesco')>=0):
+        if ((lista[x].find('Bradesco')>=0) and (lista[x].find('.xls')>=0)):
             module_logger.debug('Entrei no if para Bradesco')
             novasLinhas = processaBradesco(caminhoCompleto_old)
             print ('As novas linhas sao:')
@@ -138,6 +137,21 @@ def fProcNovos():
                     folhaOriginais.cell(row=max_FOB, column=colInicioBradesco+col+1).fill = fill_pattern_Bradesco
                     folhaOriginais.cell(row=max_FOB, column=colInicioBradesco+col+1).border = Border(top=thin, left=thin, right=thin, bottom=thin)
                 max_FOB += 1
+
+        elif ((lista[x].find('Bradesco')>=0) and (lista[x].find('.csv')>=0)):
+            module_logger.debug('Entrei no if do .csv para Bradesco')
+            novasLinhas = processaBradesco_csv(caminhoCompleto_old)
+            print ('As novas linhas sao:')
+            print(novasLinhas)
+            max_FOI = max_FO
+            colInicioBB=15
+
+            for linha in range(1, len(novasLinhas)):
+                for col in range(len(novasLinhas[linha])):
+                    folhaOriginais.cell(row=max_FOI, column=colInicioBB+col+1).value = novasLinhas[linha][col]
+                    folhaOriginais.cell(row=max_FOI, column=colInicioBB+col+1).fill = fill_pattern_BB
+                    folhaOriginais.cell(row=max_FOI, column=colInicioBB+col+1).border = Border(top=thin, left=thin, right=thin, bottom=thin)
+                max_FOI += 1
 
         elif (lista[x].find('Itau')>=0):
             module_logger.debug('Entrei no if para Itaú')
