@@ -181,3 +181,8 @@ ExtratosEnv/
 # Arquivos Saneado* (resultado do processamento dos extratos) e extr* (todos os arquivos de extratos, independentemente do banco)
 extr*
 Saneado*
+
+# Conteudo dos diretórios de processamento (vão apenas os diretórios)
+
+novos/*
+processados/*
