@@ -1,6 +1,7 @@
 import logging
 from processaNovos import fProcNovos
 
+
 def main(tipoProcessamento='Normal'):
 
     logger = logging.getLogger('root')
